@@ -1,0 +1,102 @@
+<ion-header>
+  <ion-toolbar color="danger" class="center">
+    <ion-row>
+      <ion-col size="2"><ion-back-button></ion-back-button></ion-col>
+      <ion-col size="10"><ion-title>{{movieDetails.Title}}</ion-title></ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="dark">
+  <ion-grid no-padding>
+    <ion-row class="center" padding>
+      <ion-col no-padding class="centered_ele" size="auto">
+        <img id="Poster" *ngIf="movieDetails.Poster != 'N/A'" src="{{movieDetails.Poster}}">
+        <img *ngIf="movieDetails.Poster == 'N/A'" src="../../assets/images/movie-img.png">
+        <img src="{{moviePosterHD}}">
+        <div class="favorite_star_container">
+          <div class="favorite_star_container_relative">
+            <ion-icon name="star-outline" (click)="favoriteFilm()" *ngIf="!isFavorite" class="favorite_star"></ion-icon>
+            <ion-icon name="star" (click)="unfavoriteFilm()" *ngIf="isFavorite" class="favorite_star"></ion-icon>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="police_small row_Lpadding">
+      <ion-col size="2">
+        {{movieDetails.Year}}
+      </ion-col>
+      <ion-col size="7" class="center">
+        {{movieDetails.Genre}}
+      </ion-col>
+      <ion-col size="3">
+        <img class="mpaa_img" *ngIf="movieDetails.Rated == 'G'" src="../../assets/images/G.png">
+        <img class="mpaa_img" *ngIf="movieDetails.Rated == 'PG'" src="../../assets/images/PG.png">
+        <img class="mpaa_img" *ngIf="movieDetails.Rated == 'PG-13'" src="../../assets/images/PG-13.png">
+        <img class="mpaa_img" *ngIf="movieDetails.Rated == 'R'" src="../../assets/images/R.png">
+        <img class="mpaa_img" *ngIf="movieDetails.Rated == 'NC-17'" src="../../assets/images/NC-17.png">
+        <img class="mpaa_img" *ngIf="movieDetails.Rated != 'G' && movieDetails.Rated != 'PG' && movieDetails.Rated != 'PG-13' && movieDetails.Rated != 'R' && movieDetails.Rated != 'NC-17'" src="../../assets/images/NR.png">
+      </ion-col>
+    </ion-row>
+    <ion-row class="row_padding">
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title class="white_text">
+              Synopsis
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{movieDetails.Plot}}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="police_small row_Lpadding">
+      <ion-col size="5">
+        Durée : {{movieDetails.Runtime}}
+      </ion-col>
+      <ion-col size="7">
+        Réalisateur : {{movieDetails.Director}}
+      </ion-col>
+    </ion-row>
+    <ion-row class="police_small row_Lpadding">
+      <ion-col size="12" *ngIf="movieDetails.Website != 'N/A'" >
+        <a href="{{movieDetails.Website}}">Site web associé</a>
+      </ion-col>
+    </ion-row>
+    <ion-row padding class="row_padding">
+      <ion-col size="6" class="center">
+          <ion-title padding>Acteurs Principaux</ion-title>
+          <ion-icon ion-button class="left_arrow" name="arrow-dropleft" (click)="prevSlide()"></ion-icon>
+          <ion-icon ion-button class="right_arrow" name="arrow-dropright" (click)="nextSlide()"></ion-icon>
+          <ion-slides pager="false" #slides>
+            <ion-slide *ngFor="let actor of movieActors">
+              {{actor}}
+            </ion-slide>
+          </ion-slides>
+      </ion-col>
+      <ion-col size="6" class="center">
+        <ion-title padding>Note IMDB</ion-title>
+        <ion-text>{{movieDetails.imdbRating}}</ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row_padding">
+      <ion-col size="12">
+          <ion-card>
+              <ion-card-header>
+                <ion-card-title class="white_text">
+                  Prix et Nominations
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content *ngIf="movieDetails.Awards != 'N/A'">
+                  {{movieDetails.Awards}}
+              </ion-card-content>
+              <ion-card-content *ngIf="movieDetails.Awards == 'N/A'">
+                Aucune nomination ou award.
+            </ion-card-content>
+            </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

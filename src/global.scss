@@ -9,3 +9,126 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+.card-background-page {
+
+    ion-card {
+      position: relative;
+      text-align: center;
+    }
+  
+    .card-background-header {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.75);
+      top: 0;
+      width: 100%;
+      font-weight: bold;
+    }
+    .card-background-header ion-card-subtitle, .card-background-header ion-card-title{
+        color: #fff;
+    }
+  }
+
+  .center{
+    text-align: center;
+  }
+
+  .imdbID{
+    display: none;
+  }
+
+  .mpaa_img{
+    float: right;
+    height: 20px;
+  }
+
+  .nav-bar{
+    background-color: #DA2D2D;
+  }
+
+  .white_text{
+    color: #FFF;
+  }
+
+  .police_small{
+    font-size: 0.8em;
+  }
+
+  .row_padding{
+    padding-left: 3%;
+    padding-right: 3%;
+  }
+
+  .row_Lpadding{
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  .horizontal_scroll{
+    white-space: nowrap;
+    width: 50px;
+    overflow-x: auto !important;
+  }
+
+  .left_arrow{
+    position: absolute;
+    z-index: 3000;
+    left: 5%;
+  }
+
+  .right_arrow{
+    position: absolute;
+    z-index: 3000;
+    right: 5%;
+  }
+
+  .centered_ele{
+    margin: 0 auto;
+  }
+
+  .favorite_star_container{
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-bottom-left-radius: 15px;
+  }
+
+  .favorite_star_container_relative{
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .favorite_star{
+    position: relative;
+    color: yellow;
+    font-size: 50px;
+  }
+
+  .search_icon{
+    float: right;
+    font-size: 2em;
+  }
+
+  .navbar_row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .media_list{
+    background: var(--ion-color-base);
+  }
+
+  .media_list .item, .media_list .item-content, .item-native, .item-highlight{
+    background-color: transparent!important;
+  }
+
+  .vertical-align{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }

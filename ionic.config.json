@@ -1,6 +1,8 @@
 {
   "name": "akerUms",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "45b7e156"
 }

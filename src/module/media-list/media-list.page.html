@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-grid no-padding>
+      <ion-row class="navbar_row">
+        <ion-col size="auto">
+          <ion-title no-padding>U M S</ion-title>
+        </ion-col>
+        <ion-col size="auto" no-padding>
+            <ion-searchbar no-padding (ionCancel)="hideSearchBar()" [showCancelButton]="true" *ngIf="searchBarDisplayed" color="danger" [debounce]="700" (ionChange)="loadMoviesByTitle($event)" placeholder="recherche..." #searchBar></ion-searchbar>
+        </ion-col>
+        <ion-col size="1" *ngIf="!searchBarDisplayed">
+          <ion-icon class="search_icon" (click)="showSearchBar()" name="search"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="dark" padding>
+  <ion-grid><!--
+    <ion-row *ngFor="let movie of moviesList">
+      <ion-col class="card-background-page">
+        <ion-card class="movie_card" (click)="openDetailsPage(movie.imdbID)" >
+          <img *ngIf="movie.Poster != 'N/A'" src="{{movie.Poster}}">
+          <img *ngIf="movie.Poster == 'N/A'" src="../../assets/images/movie-img.png">
+          <ion-card-header class="card-background-header">
+            <ion-card-title>{{movie.Title}}</ion-card-title>
+            <ion-card-subtitle>{{movie.Year}}</ion-card-subtitle>
+            <div class="imdbID">{{movie.imdbID}}</div>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>-->
+    <ion-row *ngIf="this.tooMuchResult">
+      <ion-col size="12" class="center">
+        <ion-text>Veuillez affiner votre recherche</ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="this.movieNotFound">
+      <ion-col size="12" class="center">
+        <ion-text>Le film recherché n'existe pas.</ion-text>
+      </ion-col>
+      <ion-col size="12" class="center" padding>
+        <ion-text>Veuillez Essayer autre chose</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list class="media_list">
+    <ion-item *ngFor="let movie of moviesList">
+      <ion-col class="card-background-page">
+        <ion-card class="movie_card" (click)="openDetailsPage(movie.imdbID)" >
+          <img *ngIf="movie.Poster != 'N/A'" src="{{movie.Poster}}">
+          <img *ngIf="movie.Poster == 'N/A'" src="../../assets/images/movie-img.png">
+          <ion-card-header class="card-background-header">
+            <ion-card-title>{{movie.Title}}</ion-card-title>
+            <ion-card-subtitle>{{movie.Year}}</ion-card-subtitle>
+            <div class="imdbID">{{movie.imdbID}}</div>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-item>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content color="light" loadingSpinner="bubbles"></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+  </ion-list>
+  
+</ion-content>
