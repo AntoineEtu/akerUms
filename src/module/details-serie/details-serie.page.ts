@@ -1,3 +1,4 @@
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSlides, LoadingController, NavController } from '@ionic/angular';
 import { OmdbApiService } from 'src/service/omdb/omdb-api.service';
@@ -18,10 +19,14 @@ export class DetailsSeriePage implements OnInit {
   isFavorite : boolean
   seriePosterHD : Blob
   seriePosterBase64 : string | ArrayBuffer
-  @ViewChild('slides') slides: IonSlides;
+  seriePosterHDUrl : SafeUrl
+  seriePosterBlob : Blob
+  isPosterHD : boolean
+  @ViewChild('slides') slides: IonSlides
 
-  constructor(public api: OmdbApiService, public loadingController: LoadingController, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private favoriteService :FavoriteService) {
+  constructor(public api: OmdbApiService, public loadingController: LoadingController, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private favoriteService :FavoriteService, private sanitizer : DomSanitizer) {
     this.serieDetails = new Observable<any>();
+    this.isPosterHD = false;
    }
 
   ngOnInit() {
@@ -40,16 +45,15 @@ export class DetailsSeriePage implements OnInit {
   });
   await loading.present();
   this.api.detailsSerieByImdbID(this.serieID).subscribe(
-    res => {this.serieDetails=res;loading.dismiss();this.formatData(res);/*this.loadPosterFilm()*/},
+    res => {this.serieDetails=res;loading.dismiss();this.formatData(res);this.loadPosterSerie()},
     err => {console.log(err);loading.dismiss()});
   }
 
   async loadPosterSerie(){
-    //TODO : GERER L'AFFICHAGE DE CETTE DONNEE DE MERDE
-    let url = this.api.getPosterById(this.serieID);
-    url.subscribe(
-      res => {this.seriePosterHD=res;console.log(res);this.changeImgSource();},
-      err => {console.log(err);this.changeImgSource();});
+    let blob = this.api.getPosterById(this.serieID);
+    blob.subscribe(
+      res => {this.seriePosterBlob=res;this.changeImgSource();this.isPosterHD = true;},
+      err => {console.log(err);this.isPosterHD = false;});
   }
 
   formatData(res : Observable<any>) : void{
@@ -61,12 +65,9 @@ export class DetailsSeriePage implements OnInit {
   }
 
   changeImgSource(){
-    var reader = new FileReader();
-          reader.readAsDataURL(this.seriePosterHD);
-          reader.onloadend = () => {
-            this.seriePosterBase64 = reader.result;
-            console.log(this.seriePosterBase64);
-          }
+    let urlCreator = window.URL;
+    this.seriePosterHDUrl = this.sanitizer.bypassSecurityTrustUrl(urlCreator.createObjectURL(this.seriePosterBlob));
+    alert(this.seriePosterHDUrl);
   }
 
   nextSlide() {

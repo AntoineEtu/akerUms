@@ -47,7 +47,8 @@ export class OmdbApiService {
   getPosterById(id : string) : Observable<any>{
     let request : string = this.buildPosterURLWithAPIKey();
     request += "&i=" + id;
-    return this.http.get(request);
+    console.log("api request : " + request);
+    return this.http.get(request, {responseType : "blob"});
   }
 
   searchSeriesByTitle(titleParam : string) : Observable<any>{

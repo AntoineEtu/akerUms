@@ -9,11 +9,11 @@
 
 <ion-content color="dark">
   <ion-grid no-padding>
-    <ion-row class="center" padding>
+    <ion-row class="center">
       <ion-col no-padding class="centered_ele" size="auto">
-        <img id="Poster" *ngIf="movieDetails.Poster != 'N/A'" src="{{movieDetails.Poster}}">
+        <img id="Poster" *ngIf="movieDetails.Poster != 'N/A' && !isPosterHD" src="{{movieDetails.Poster}}">
         <img *ngIf="movieDetails.Poster == 'N/A'" src="../../assets/images/movie-img.png">
-        <img src="{{moviePosterHD}}">
+        <img *ngIf="isPosterHD" [src]="moviePosterHDUrl">
         <div class="favorite_star_container">
           <div class="favorite_star_container_relative">
             <ion-icon name="star-outline" (click)="favoriteFilm()" *ngIf="!isFavorite" class="favorite_star"></ion-icon>
@@ -22,7 +22,12 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-row class="police_small row_Lpadding">
+    <ion-row class="center">
+      <ion-col class="centered_ele" no-padding>
+        <ion-button (click)="downloadHdPoster()">Télécharger poster</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row padding class="police_small row_Lpadding">
       <ion-col size="2">
         {{movieDetails.Year}}
       </ion-col>

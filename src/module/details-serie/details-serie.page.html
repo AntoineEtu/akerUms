@@ -11,9 +11,9 @@
     <ion-grid no-padding>
       <ion-row class="center" padding>
         <ion-col no-padding class="centered_ele" size="auto">
-          <img id="Poster" *ngIf="serieDetails.Poster != 'N/A'" src="{{serieDetails.Poster}}">
+          <img id="Poster" *ngIf="serieDetails.Poster != 'N/A' && !isPosterHD" src="{{serieDetails.Poster}}">
           <img *ngIf="serieDetails.Poster == 'N/A'" src="../../assets/images/movie-img.png">
-          <img src="{{seriePosterHD}}">
+          <img *ngIf="isPosterHD" [src]="seriePosterHDUrl">
           <div class="favorite_star_container">
             <div class="favorite_star_container_relative">
               <ion-icon name="star-outline" (click)="favoriteSerie()" *ngIf="!isFavorite" class="favorite_star"></ion-icon>
