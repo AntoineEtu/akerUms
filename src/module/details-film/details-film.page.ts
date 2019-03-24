@@ -1,3 +1,4 @@
+import { FileManagerService } from './../../service/fileManager/file-manager.service';
 import { FavoriteService } from './../../service/favorite/favorite.service';
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { LoadingController, IonSlides } from '@ionic/angular';
@@ -28,7 +29,7 @@ export class DetailsFilmPage implements OnInit {
   @ViewChild('slides') slides: IonSlides;
   //fileTransfer: FileTransferObject
 
-  constructor(public api: OmdbApiService, public loadingController: LoadingController, public navCtrl: NavController, private router: Router, private favoriteService :FavoriteService, private http :HttpClient, private sanitizer : DomSanitizer,/* private transfer: FileTransfer, private file: File*/) {
+  constructor(public api: OmdbApiService, public loadingController: LoadingController, public navCtrl: NavController, private router: Router, private favoriteService :FavoriteService, private http :HttpClient, private sanitizer : DomSanitizer, private fileManager : FileManagerService/* private transfer: FileTransfer, private file: File*/) {
     this.movieDetails = new Observable<any>();
     this.isPosterHD = false;
    }
@@ -63,12 +64,18 @@ export class DetailsFilmPage implements OnInit {
       res => {this.moviePosterBlob=res;this.changeImgSource();this.isPosterHD = true;},
       err => {console.log(err);this.isPosterHD = false;});
   }
+
+  downloadHdPoster(){
+    this.fileManager.save().then(() => {
+      alert("download done");
+    });
+  }
   /*
   downloadHdPoster(){
     this.fileTransfer = this.transfer.create();
     //let url = this.sanitizer.sanitize(SecurityContext.HTML, this.moviePosterHDUrl);
     alert("début download");
-    this.fileTransfer.download('https://www.ynov.com/brochures/brochure_ynov_20182019.pdf', this.file.dataDirectory + 'file.pdf').then((entry) => {
+    this.fileTransfer.download('https://www.ynov.com/brochures/brochure_ynov_20182019.pdf', this.file.dataDirectory + '/file.pdf', true).then((entry) => {
       alert("download success")
       alert(entry.toURL());
       entry.toURL();

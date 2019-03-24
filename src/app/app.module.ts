@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FavoriteService } from '../service/favorite/favorite.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { FileManagerService } from '../service/fileManager/file-manager.service';
+//import { AndroidPermissions } from '@ionic-native/android-permissions';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -20,6 +21,7 @@ import { FileManagerService } from '../service/fileManager/file-manager.service'
     SplashScreen,
     FavoriteService,
     FileManagerService,
+    //AndroidPermissions,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

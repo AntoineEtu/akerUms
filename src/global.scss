@@ -132,3 +132,17 @@
     justify-content: center;
     align-content: center;
   }
+
+  .dynamic_card{
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+    max-height: 0;
+    height: auto;
+  }
+
+  .dynamic_card_active{
+    max-height: 3000px!important;
+    padding: 13px 16px!important;
+  }

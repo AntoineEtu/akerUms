@@ -1,29 +1,38 @@
 import { Injectable } from '@angular/core';
-
+import { Platform } from '@ionic/angular';
+import { File } from '@ionic-native/file/ngx';
+//import { AndroidPermissions } from '@ionic-native/android-permissions';
 @Injectable({
   providedIn: 'root'
 })
 export class FileManagerService {
-  /*
-  const fileTransfer: FileTransferObject = this.transfer.create();
-  
-  constructor(private transfer: FileTransfer, private file: File) { }
 
-  public download() {
-    const url = 'http://www.example.com/file.pdf';
-    this.fileTransfer.download(url, this.file.dataDirectory + 'file.pdf').then((entry) => {
-      console.log('download complete: ' + entry.toURL());
-    }, (error) => {
-      console.log(error);
+  constructor(private file: File, private platform: Platform, /*private androidPermissions: AndroidPermissions*/) { }
+  
+  async save() {
+    this.platform.ready().then(() => {
+      alert("device ready !");
+      //this.checkIfPermissionToWriteFile();
+      //this.requestDocumentsFolderPermissions();
+      return this.file.writeFile(this.file.documentsDirectory, 'hello.json', JSON.stringify({test:'value'}), {replace:true});
     });
+  }
+  /*
+  checkIfPermissionToWriteFile(){
+    this.androidPermissions.hasPermission(this.androidPermissions.PERMISSION.MANAGE_DOCUMENTS).then(
+      (status) => { console.log(status);alert(status)}
+    );
+  }
+
+  requestDocumentsFolderPermissions(){
+    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_DOCUMENTS);
+  }*/
+  /*
+  private error() {
+    console.warn('Camera permission is not turned on');
+  }
+
+  private success( status ) {
+    if( !status.hasPermission ) this.error();
   }*/
 }
-
-// Upload a file:
-//fileTransfer.upload(..).then(..).catch(..);
-
-// Download a file:
-//fileTransfer.download(..).then(..).catch(..);
-
-// Abort active transfer:
-//fileTransfer.abort();

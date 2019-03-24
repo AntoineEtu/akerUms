@@ -1,5 +1,5 @@
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, ElementRef} from '@angular/core';
 import { IonSlides, LoadingController, NavController } from '@ionic/angular';
 import { OmdbApiService } from 'src/service/omdb/omdb-api.service';
 import { Observable } from 'rxjs';
@@ -22,10 +22,12 @@ export class DetailsSeriePage implements OnInit {
   seriePosterHDUrl : SafeUrl
   seriePosterBlob : Blob
   isPosterHD : boolean
+  seasonsList : any[]
   @ViewChild('slides') slides: IonSlides
 
-  constructor(public api: OmdbApiService, public loadingController: LoadingController, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private favoriteService :FavoriteService, private sanitizer : DomSanitizer) {
+  constructor(public api: OmdbApiService, public loadingController: LoadingController, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private favoriteService :FavoriteService, private sanitizer : DomSanitizer, private renderer:Renderer2) {
     this.serieDetails = new Observable<any>();
+    this.seasonsList = new Array<any>();
     this.isPosterHD = false;
    }
 
@@ -57,6 +59,10 @@ export class DetailsSeriePage implements OnInit {
   }
 
   formatData(res : Observable<any>) : void{
+    let nbSeasons = res["totalSeasons"];
+    for (let index = 0; index < nbSeasons; index++) {
+      this.seasonsList.push(index);
+    }
     let actorsString = res["Actors"];
     this.serieActors = actorsString.split(",");
     this.serieActors.forEach(actor => {
@@ -64,10 +70,63 @@ export class DetailsSeriePage implements OnInit {
     });
   }
 
+  OpenCloseSeasonDetail(nbSeason : string){
+    let target = document.getElementById("idSaison_" + nbSeason);
+      if(target.classList.contains("dynamic_card_active")){
+        target.classList.remove("dynamic_card_active");
+      }else{
+        if(!target.classList.contains("loaded")){
+          this.loadDetailsSeason(parseInt(nbSeason,10));
+          target.classList.add("loaded");
+        }
+        target.classList.add("dynamic_card_active");
+      }
+      console.log(target);
+  }
+
+  async loadDetailsSeason(nbSeason : number){
+    let seasonDetail;
+    const loading = await this.loadingController.create({
+      message: 'Chargement de la saison'
+    });
+    await loading.present();
+    this.api.detailsSeasonByImdbID(this.serieID, nbSeason).subscribe(
+      res => {this.addEpisodesContent(nbSeason, res);loading.dismiss();/*this.formatData(res);*//*this.loadPosterSerie()*/},
+      err => {console.log(err);loading.dismiss()});
+  }
+
+  public addEpisodesContent(nbSeason, seasonDetail){
+    let target = document.getElementById("idSaison_" + nbSeason);
+    console.log(seasonDetail);
+    if(seasonDetail["Response"] == "True"){
+      console.log(seasonDetail["Episodes"].length);
+      for (let index = 1; index < seasonDetail["Episodes"].length; index++) {
+        let content = this.renderer.createElement('ion-badge');
+        content.setAttribute('color', 'light');
+        content.setAttribute('season','nbSeason');
+        content.setAttribute('episode', index);
+        //this.renderer.listen(content, 'click', this.openEpisodePage());
+        let text = this.renderer.createText('Episode ' + index);
+        this.renderer.appendChild(content, text);
+        target.appendChild(content);
+      }
+    }else{
+      let content = this.renderer.createElement('ion-badge');
+      content.setAttribute('color', 'light');
+      let text = this.renderer.createText('Aucune informations');
+      this.renderer.appendChild(content, text);
+      target.appendChild(content);
+    }
+  }
+
+  public openEpisodePage(){
+    //TODOb redirect to another page
+  }
+
   changeImgSource(){
     let urlCreator = window.URL;
     this.seriePosterHDUrl = this.sanitizer.bypassSecurityTrustUrl(urlCreator.createObjectURL(this.seriePosterBlob));
-    alert(this.seriePosterHDUrl);
+    //alert(this.seriePosterHDUrl);
   }
 
   nextSlide() {

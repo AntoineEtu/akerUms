@@ -74,13 +74,14 @@ export class OmdbApiService {
 
   detailsSeasonByImdbID(id : string, seasonNumber : number) : Observable<any>{
     let request : string = this.buildOmdbURLWithAPIKey();
-    request += "&i=" + id + "&type=series" + "&season=" + seasonNumber;
+    request += "&i=" + id + "&season=" + seasonNumber;
+    console.log(request);
     return this.http.get(request);
   }
 
   detailsEpisodeByImdbID(id : string, seasonNumber : number, episodeNumber : number) : Observable<any>{
     let request : string = this.buildOmdbURLWithAPIKey();
-    request += "&i=" + id + "&type=series" + "&season=" + seasonNumber + "&episode=" +episodeNumber;
+    request += "&i=" + id + "&season=" + seasonNumber + "&episode=" +episodeNumber;
     return this.http.get(request);
   }
 
